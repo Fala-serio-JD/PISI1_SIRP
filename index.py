@@ -8,6 +8,7 @@ from perfil import tela_perfil
 from controle_problemas import reportar_novo_problema, listar_problemas
 
 usuarios = []
+usuario_conectado = False
 
 main_cabecalho()
 
@@ -33,7 +34,8 @@ while True:
         cabecalho()
         print("Cadastro concluído com êxito! Por favor, faça login no sistema agora.")
         time.sleep(2)
-        tela_login(usuarios)
+        usuario_conectado = tela_login(usuarios)
+        time.sleep(2)
         break
 
     else:
@@ -64,10 +66,7 @@ while True:
         tela_perfil(usuarios, nome, email, num_contato)
 
     elif opcao == '4': 
-        print("Você escolheu 'Sair'. Aguarde...")
-        time.sleep(2)
-        limpar_tela()
-        logoff()
+        usuario_conectado = logoff()    #ver se tá funcionando
         break
 
     else:print("Selecione uma opção válida!")

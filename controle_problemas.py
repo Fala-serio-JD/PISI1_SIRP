@@ -4,6 +4,7 @@ from utils import limpar_tela, divisoria, divisoria_grossa, cabecalho, limpar_st
 import banco_dados_problemas
 
 def listar_problemas():
+    """Interface CLI para exposição em feed dos problemas cadastrados no sistema."""
     cabecalho()
     print("=== FEED DE PROBLEMAS RURALINDA ===")
     for problema in banco_dados_problemas.feed_de_problemas:
@@ -11,7 +12,8 @@ def listar_problemas():
     escolher_problema()
 
 
-def escolher_problema():
+def escolher_problema():    #OBS: SAIR DE ESCOLHER PROBLEMA NÃO TÁ FUNCIONANDO!
+    """Interface CLI para a escolha e exibição do(s) problema(s) selecionado(s) pelo usuário."""
     while True:
         limpar_stdin()
         id_problema = input("Digite o número para ler detalhes ou '0' para voltar: ")
@@ -42,6 +44,13 @@ def escolher_problema():
             break
 
 def reportar_novo_problema(usuarios, nome, email):
+    """Interface CLI dedicada ao registro de novos problemas
+    
+    Args:
+        usuarios (dicionário)
+        nome (str)
+        email (str)
+    """
     cabecalho()
     print(f"\n{divisoria_grossa()} REPORTADOR DE PROBLEMA {divisoria_grossa()}\n")
 

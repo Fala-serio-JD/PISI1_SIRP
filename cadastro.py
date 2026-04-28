@@ -4,6 +4,17 @@ from utils import cabecalho, parametros_cadastro, limpar_stdin
 from validacoes import nome_valido, email_valido, contato_valido, senha_valida
 
 def tela_cadastro(usuarios):
+    """Interface em CLI de cadastro de usuário.
+    
+    Args:
+        usuarios (dicionário): o espaço dedicado ao registro das informações pessoais do usuário.
+
+    returns:
+        nome (str): nome do usuário.
+        email (str): email institucional do usuário.
+        num_contato (int): número de contato do usuário.
+        senha (str): senha do usuário.
+    """
     cabecalho()
     print(f"\nBem vindo ao cadastro! Por favor, atente-se aos parâmetros de validade de cada campo. {parametros_cadastro()}")
 
@@ -63,7 +74,16 @@ def tela_cadastro(usuarios):
 
 id_usuario = 1
 def cadastrar_usuario(nome, email, senha, num_contato, usuarios):
-    global id_usuario   #Usar global é má prática.
+    """Esta função arbitra um id ao usuário e aloca em um dicionário o nome, email, senha e número de contato fornecidos.
+    
+    args:
+        nome (str)
+        email (str)
+        senha (str)
+        num_contato (int)
+        usuarios (dicionário)
+    """
+    global id_usuario
 
     usuario = {
         "id": id_usuario,

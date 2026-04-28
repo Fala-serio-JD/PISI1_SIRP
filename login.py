@@ -4,6 +4,11 @@ from utils import limpar_tela, limpar_stdin, cabecalho
 from validacoes import validacao_acesso
 
 def tela_login(usuarios):
+    """Interface CLI dedicada ao login do usuário
+    
+    Returns:
+        bool: True
+    """
     while True:
         cabecalho()
         print("Preencha os dados de login:")
@@ -17,8 +22,11 @@ def tela_login(usuarios):
         sucesso = validacao_acesso(usuarios, usuario, senha)
 
         if sucesso:
+            usuario_conectado = True
             break
         else:
             limpar_tela()
             print("Usuário ou senha incorreto. Preencha os campos novamente.")
             time.sleep(3)
+    
+    return True

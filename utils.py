@@ -3,9 +3,11 @@ import time
 import sys
 
 def limpar_tela():
+    """Função dedicada à limpeza do terminal"""
     os.system("cls" if os.name == "nt" else "clear")
 
 def logo():
+    """Arte ASCII do SIRP"""
     print("""
 ███████╗██╗██████╗ ██████╗ 
 ██╔════╝██║██╔══██╗██╔══██╗
@@ -18,10 +20,12 @@ System Integration Ruralinda Problems
 -------------------------------------------------------------------------------""")
 
 def cabecalho():
+    """Função dedicada à exibição da  logo do SIRP de forma geral."""
     limpar_tela()
     logo()
 
 def main_cabecalho():
+    """Função dedicada à apresentação principal da logo do SIRP."""
     cabecalho()
     print("""
 Bem vindo(a)!
@@ -35,6 +39,7 @@ Desse jeito, nunca foi tão fácil fazer networking!
 """)
 
 def parametros_cadastro():
+    """Função dedicada à exibição dos parâmetros de aceitação dos campos do cadastro."""
     return"""\n[Nome completo]
 - Não pode estar vazio
 - Deve ter pelo menos 5 caracteres
@@ -59,19 +64,27 @@ def parametros_cadastro():
 - Deve conter pelo menos um caractere especial
 - Deve conter pelo menos uma letra"""
 
-def divisoria():  #Dá pra mesclar com a linha divisoria grossa
+def divisoria():
+    """Exibe uma linha divisória constituída de 90 traços (-) sequenciados"""
     return "-" * 90
 
 def divisoria_grossa():
+    """Exibe uma linha divisória grossa constituída de 20 iguais (=) sequenciados"""
     return "=" * 20
 
 def logoff():
+    """Função dedicada ao logoff do usuário no SIRP
+    
+    Returns:
+        bool: False
+    """
     limpar_tela()
     print("Saindo do sistema...")
     time.sleep(2)
+    return False
 
-#Limpar buffer do terminal para evitar comportamento indesejado.
 def limpar_stdin():
+    """Função dedicada a limpar buffer do terminal para evitar comportamento indesejado."""
     if os.name == "posix":
         # Linux / macOS
         import termios
@@ -84,6 +97,11 @@ def limpar_stdin():
             msvcrt.getch()
 
 def submeter_titulo():
+    """Função dedicada à submissão do título do problema
+    
+    Returns:
+        str: titulo.
+    """
     while True:
         limpar_stdin()
         titulo = input("Título (até 100 caracteres): ")
@@ -95,10 +113,14 @@ def submeter_titulo():
             print("O título é obrigatório.")
         else:
             print("O seu título excedeu o limite de 100 caracteres.")
-
     return titulo
 
 def submeter_descricao():
+    """Função dedicada à submissão da descrição do problema
+    
+    Returns:
+        str: descricao.
+    """
     while True:
         limpar_stdin()
         descricao = input("Descreva o problema (até 1000 caracteres): ")
@@ -110,5 +132,4 @@ def submeter_descricao():
             print("A descrição é obrigatória.")
         else:
             print("A sua descrição excedeu o limite máximo de 1000 caracteres.")
-
     return descricao
