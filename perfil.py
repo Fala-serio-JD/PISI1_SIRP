@@ -11,6 +11,4 @@ def tela_perfil(usuarios, nome, email, num_contato):
 
     gerir_usuario(usuarios, nome, email, num_contato)
     divisoria()
-    time.sleep(5) #Provisório. colocar a função tela_perfil em uma estrutura while e definir um botão padrão para sair da tela
-
-    #chamar a função feed de problemas com apenas os problemas associados ao nome do usuário. Necessário ainda criar uma estrutura para manipulação dos dados dos problemas, bem como a sua exclusão.
+    time.sleep(6)

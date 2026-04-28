@@ -59,22 +59,6 @@ def parametros_cadastro():
 - Deve conter pelo menos um caractere especial
 - Deve conter pelo menos uma letra"""
 
-id_usuario = 1
-
-def cadastrar_usuario(nome, email, senha, num_contato, usuarios):
-    global id_usuario   #Usar global é má prática.
-
-    usuario = {
-        "id": id_usuario,
-        "nome": nome,
-        "email": email,
-        "senha": senha,
-        "num_contato": num_contato
-        }
-
-    usuarios.append(usuario)
-    id_usuario += 1
-
 def divisoria():  #Dá pra mesclar com a linha divisoria grossa
     return "-" * 90
 
@@ -98,3 +82,33 @@ def limpar_stdin():
         import msvcrt
         while msvcrt.kbhit():
             msvcrt.getch()
+
+def submeter_titulo():
+    while True:
+        limpar_stdin()
+        titulo = input("Título (até 100 caracteres): ")
+
+        if len(titulo) > 0 and len(titulo)<= 100:
+            print("Título válido!")
+            break
+        elif len(titulo) == 0:
+            print("O título é obrigatório.")
+        else:
+            print("O seu título excedeu o limite de 100 caracteres.")
+
+    return titulo
+
+def submeter_descricao():
+    while True:
+        limpar_stdin()
+        descricao = input("Descreva o problema (até 1000 caracteres): ")
+
+        if len(descricao) > 0 and len(descricao) <= 1000:
+            print("Descrição válida.")
+            break
+        elif len(descricao) == 0:
+            print("A descrição é obrigatória.")
+        else:
+            print("A sua descrição excedeu o limite máximo de 1000 caracteres.")
+
+    return descricao

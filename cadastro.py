@@ -61,3 +61,17 @@ def tela_cadastro(usuarios):
 
     return nome, email, num_contato, senha
 
+id_usuario = 1
+def cadastrar_usuario(nome, email, senha, num_contato, usuarios):
+    global id_usuario   #Usar global é má prática.
+
+    usuario = {
+        "id": id_usuario,
+        "nome": nome,
+        "email": email,
+        "senha": senha,
+        "num_contato": num_contato
+        }
+
+    usuarios.append(usuario)
+    id_usuario += 1

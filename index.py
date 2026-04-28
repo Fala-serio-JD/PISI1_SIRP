@@ -1,15 +1,15 @@
 import time
 
 from login import tela_login
-from cadastro import tela_cadastro
-from utils import limpar_tela, cadastrar_usuario, logoff, cabecalho , limpar_stdin, main_cabecalho
+from cadastro import tela_cadastro, cadastrar_usuario
+from utils import limpar_tela, logoff, cabecalho , limpar_stdin, main_cabecalho
 from menu import tela_menu
 from perfil import tela_perfil
 from controle_problemas import reportar_novo_problema, listar_problemas
 
 usuarios = []
 
-main_cabecalho() #Verificar se vai aparecer o none
+main_cabecalho()
 
 time.sleep(7.5)
 print("Já está cadastrado?")

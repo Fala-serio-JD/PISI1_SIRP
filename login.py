@@ -1,3 +1,5 @@
+import time
+
 from utils import limpar_tela, limpar_stdin, cabecalho
 from validacoes import validacao_acesso
 
@@ -19,3 +21,4 @@ def tela_login(usuarios):
         else:
             limpar_tela()
             print("Usuário ou senha incorreto. Preencha os campos novamente.")
+            time.sleep(3)

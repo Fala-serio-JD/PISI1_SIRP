@@ -1,5 +1,6 @@
 import time
-from utils import limpar_tela, divisoria, divisoria_grossa, cabecalho, limpar_stdin
+
+from utils import limpar_tela, divisoria, divisoria_grossa, cabecalho, limpar_stdin, submeter_descricao, submeter_titulo
 import banco_dados_problemas
 
 def listar_problemas():
@@ -20,52 +21,32 @@ def escolher_problema():
                 limpar_tela()
                 problema = banco_dados_problemas.feed_de_problemas[(int(id_problema)) - 1]    
                 print(f""" --- DETALHES DO PROBLEMA #{problema["id_problema"]} ---
-                      \nTÍTULO: {problema["titulo"]}
-                      \nDESCRIÇÃO: {problema["descrição"]}
-                      \nAUTOR: {problema["autor"]}
-                      \nCONTATO: {problema["contato"]} 
-                      \n{divisoria()}""")
-                time.sleep(12)  # Remover o limite de tempo e,quando o usuário quiser voltar, pressionar 0. 
+\nTÍTULO: {problema["titulo"]}
+\nDESCRIÇÃO: {problema["descrição"]}
+\nAUTOR: {problema["autor"]}
+\nCONTATO: {problema["contato"]} 
+\n{divisoria()}""")
+                time.sleep(12)
                 listar_problemas()
                 
+            except ValueError:
+                print("Digite um número válido!")
+
             except IndexError:
                 print("Esse problema não existe!")
 
-        elif id_problema == '0': 
+        else: 
             cabecalho()
             print("Retornando para o Menu...")
             time.sleep(2)
             break
 
-        else:
-            print("Insira um valor válido.")
-
-
 def reportar_novo_problema(usuarios, nome, email):
     cabecalho()
-
     print(f"\n{divisoria_grossa()} REPORTADOR DE PROBLEMA {divisoria_grossa()}\n")
 
-    limpar_stdin()
-    while len(titulo) == 0 or len(titulo) > 100:    # Recomenda-se tranferir essa validação para validacoes --> ver se vai ficar recursivo demais
-        titulo = input("Título curto (até 100 caracteres): ")
-
-        if len(titulo) > 0 and len(titulo)<= 100:
-            print("Título válido")
-
-        elif len(titulo) == 0: 
-            print("Você deve escrever um título.")
-
-        else: print(f"Máximo de 100 caracteres. Excedeu {len(titulo) - 100}.")
-        limpar_stdin()
-
-    limpar_stdin()
-    descricao = input("Descreva o problema (até 1000 caracteres): ")
-
-    while len(descricao) == 0 or len(descricao) > 1000:
-        print("Descrição inválida.")
-        limpar_stdin()
-        descricao = input("Descreva o problema: ")
+    titulo = submeter_titulo()
+    descricao = submeter_descricao()
 
     limpar_stdin()
     area = input("Área do problema: ")

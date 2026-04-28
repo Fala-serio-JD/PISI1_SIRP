@@ -1,9 +1,9 @@
-def validacao_acesso(usuarios, usuario_input, senha_input):  # Se quebrar é pq eu tirei usar nome
+def validacao_acesso(usuarios, usuario_input, senha_input):
     for u in usuarios:
 
         usuario_valido = usuario_input == u["email"].lower()
 
-        if not usuario_valido:  #Verificar se funciona
+        if not usuario_valido:
             usuario_valido = usuario_input == u["nome"].lower() 
 
         if usuario_valido and senha_input == u["senha"]:
