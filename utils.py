@@ -1,21 +1,38 @@
 import os
 import time
+import sys
 
 def limpar_tela():
     os.system("cls" if os.name == "nt" else "clear")
 
 def logo():
-    return"""
+    print("""
 ███████╗██╗██████╗ ██████╗ 
 ██╔════╝██║██╔══██╗██╔══██╗
 ███████╗██║██████╔╝██████╔╝
 ╚════██║██║██╔══██╗██╔═══╝ 
 ███████║██║██║  ██║██║    
 ╚══════╝╚═╝╚═╝  ╚═╝╚═╝     
-        
+
 System Integration Ruralinda Problems      
+-------------------------------------------------------------------------------""")
+
+def cabecalho():
+    limpar_tela()
+    logo()
+
+def main_cabecalho():
+    cabecalho()
+    print("""
+Bem vindo(a)!
+O SIRP dedica-se como uma rede social integrando os mais diversos saberes na resolução de problemas  de caráter interdiciplinar.
+
+Reporte qualquer problema e encontre alguém que queira dar uma solução…
+Assim promovendo a cooperação na comunidade de modo facilitado, entre aqueles que querem gerar projetos e aqueles que precisam de uma solução!
+
+Desse jeito, nunca foi tão fácil fazer networking!
 -------------------------------------------------------------------------------
-"""
+""")
 
 def parametros_cadastro():
     return"""\n[Nome completo]
@@ -45,7 +62,7 @@ def parametros_cadastro():
 id_usuario = 1
 
 def cadastrar_usuario(nome, email, senha, num_contato, usuarios):
-    global id_usuario   #Usar global é má prática. Isso vai dar problema no futuro.
+    global id_usuario   #Usar global é má prática.
 
     usuario = {
         "id": id_usuario,
@@ -58,24 +75,26 @@ def cadastrar_usuario(nome, email, senha, num_contato, usuarios):
     usuarios.append(usuario)
     id_usuario += 1
 
-def divisoria():  #Dá pra mesclar com a linha divisoria grossa desde que se use um parâmetro na função e aplique 
+def divisoria():  #Dá pra mesclar com a linha divisoria grossa
     return "-" * 90
 
 def divisoria_grossa():
     return "=" * 20
 
-def status(usuarios, nome):
-    condicao = f"[Logado como: {nome}]" if nome else "[Deslogado]" # Precisa mesmo do "Deslogado"?
-    return condicao
-
 def logoff():
     limpar_tela()
-    #username = ""
-    #email = ""
     print("Saindo do sistema...")
     time.sleep(2)
 
-def cabecalho(usuarios, nome):
-    limpar_tela()
-    logo()
-    status(usuarios, nome)
+#Limpar buffer do terminal para evitar comportamento indesejado.
+def limpar_stdin():
+    if os.name == "posix":
+        # Linux / macOS
+        import termios
+        termios.tcflush(sys.stdin, termios.TCIFLUSH)
+
+    elif os.name == "nt":
+        # Windows
+        import msvcrt
+        while msvcrt.kbhit():
+            msvcrt.getch()

@@ -1,12 +1,14 @@
 import time
-from utils import limpar_tela, logo, parametros_cadastro
+
+from utils import cabecalho, parametros_cadastro, limpar_stdin
 from validacoes import nome_valido, email_valido, contato_valido, senha_valida
 
 def tela_cadastro(usuarios):
-    limpar_tela()
-    print(f"{logo()}\nBem vindo ao cadastro! Por favor, atente-se aos parâmetros de validade de cada campo. {parametros_cadastro()}")
+    cabecalho()
+    print(f"\nBem vindo ao cadastro! Por favor, atente-se aos parâmetros de validade de cada campo. {parametros_cadastro()}")
 
     while True:
+        limpar_stdin()
         nome = input("\nNome completo: ")
         valido, erro = nome_valido(nome)
 
@@ -19,6 +21,7 @@ def tela_cadastro(usuarios):
             time.sleep(2)
 
     while True:
+        limpar_stdin()
         email = input("\nEmail institucional: ")
         valido, erro = email_valido(email, usuarios)
 
@@ -31,6 +34,7 @@ def tela_cadastro(usuarios):
             time.sleep(2)
 
     while True:
+        limpar_stdin()
         num_contato = input("\nNúmero de contato: ")
         valido, erro = contato_valido(num_contato)
 
@@ -42,7 +46,8 @@ def tela_cadastro(usuarios):
             print(f"Erro: {erro}")
             time.sleep(2)
 
-    while True:     #Dá pra usar o getpass no campo senha
+    while True:
+        limpar_stdin()
         senha = input("\nSenha: ")
         valido, erro = senha_valida(senha)
 

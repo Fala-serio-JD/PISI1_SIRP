@@ -1,13 +1,13 @@
-def validacao_acesso(usuarios, usuario_input, senha_input, usar_nome=False):
+def validacao_acesso(usuarios, usuario_input, senha_input):  # Se quebrar é pq eu tirei usar nome
     for u in usuarios:
 
-        if usar_nome:
-            usuario_valido = usuario_input == u["nome"].lower()
-        else:
-            usuario_valido = usuario_input == u["email"].lower()
+        usuario_valido = usuario_input == u["email"].lower()
+
+        if not usuario_valido:  #Verificar se funciona
+            usuario_valido = usuario_input == u["nome"].lower() 
 
         if usuario_valido and senha_input == u["senha"]:
-            print("\nCredenciais aceitas! Pode prosseguir.")
+            print("Credenciais aceitas! Pode prosseguir.")
             return True
 
     print("Usuário ou senha incorretos.")
@@ -62,6 +62,7 @@ def contato_valido(num_contato):
     tem_letra = any(c.isalpha() for c in num_contato)
     tem_numero = any(c.isdigit() for c in num_contato)
     tem_espaco = any(c.isspace() for c in num_contato)
+    tem_especial = any(not (c.isalnum() or c.isspace()) for c in num_contato)
     tamanho = 10 < len(num_contato) <= 13
 
     if not num_contato.strip():
@@ -70,6 +71,8 @@ def contato_valido(num_contato):
         return False, "O número não deve conter letras."
     if tem_espaco:
         return False, "O número não deve conter espaços."
+    if tem_especial:
+        return False, "O número não deve conter caracteres especiais."
     if not tem_numero:
         return False, "O número deve conter dígitos."
     if not tamanho:
@@ -83,6 +86,7 @@ def senha_valida(senha):
     tem_especial = any(not (c.isalnum() or c.isspace()) for c in senha)
     tamanho = len(senha) >= 8
     tem_maiuscula = any(c.isupper() for c in senha)
+    tem_minuscula = any(not (c.isupper()) for c in senha)
 
     if not tem_letra:
         return False, "A senha deve conter pelo menos uma letra."
@@ -94,5 +98,7 @@ def senha_valida(senha):
         return False, "A senha deve ter pelo menos 8 caracteres."
     if not tem_maiuscula:
         return False, "A senha deve conter pelo menos um caractere em maiúscula."
+    if not tem_minuscula:
+        return False, "A senha deve conter pelo menos um caractere em minúscula." #TESTAR
 
     return True, None

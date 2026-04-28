@@ -1,35 +1,21 @@
-from utils import limpar_tela, logo
+from utils import limpar_tela, limpar_stdin, cabecalho
 from validacoes import validacao_acesso
 
 def tela_login(usuarios):
+    while True:
+        cabecalho()
+        print("Preencha os dados de login:")
 
-    tentativas = 0
-    usar_nome = False
+        limpar_stdin()
+        usuario = input("Email ou nome completo: ").strip().lower()
 
-    while True:         #Ver se usar nome funciona.
-        limpar_tela()
-        print(f"{logo()}\nPreencha os dados de login:")
-
-        if usar_nome:
-            usuario = input("Nome completo: ").strip().lower()  #Mescla nome completo e email.
-        else:
-            usuario = input("Email: ").strip().lower()
-
+        limpar_stdin()
         senha = input("Senha: ")
 
-        sucesso = validacao_acesso(
-            usuarios, usuario, senha, usar_nome #conferir se num_contato vai dar problema.
-        )
+        sucesso = validacao_acesso(usuarios, usuario, senha)
 
         if sucesso:
             break
-
-        tentativas += 1
-
-        if tentativas == 1:
+        else:
             limpar_tela()
-            print("""Usuário ou senha incorreto.\nVocê pode usar seu nome completo no lugar do email.""")
-            escolha = input("Deseja usar nome? (sim/não): ").lower()
-
-            if escolha == "sim":
-                usar_nome = True
+            print("Usuário ou senha incorreto. Preencha os campos novamente.")
