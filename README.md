@@ -4,7 +4,7 @@
 ![Versão](https://img.shields.io/badge/Release-1.0--Volatile-orange)
 ![Python Version](https://img.shields.io/badge/Python-3.x-blue)
 
-O **SIRP** é uma plataforma de integração interdisciplinar desenvolvida para a comunidade acadêmica da **UFRPE**. O sistema visa conectar estudantes que possuem problemas técnicos com colaboradores de diversas áreas dispostos a resolvê-los, fomentando a cooperação mútua e o networking dentro da universidade.
+O **SIRP** é uma plataforma de integração interdisciplinar desenvolvida para a comunidade acadêmica da **UFRPE**. O sistema visa conectar estudantes com problemas técnicos a colaboradores dispostos a resolvê-los, fomentando a cooperação mútua.
 
 ---
 
@@ -16,54 +16,50 @@ O **SIRP** é uma plataforma de integração interdisciplinar desenvolvida para 
 
 ## 🚀 Funcionalidades e Objetivos
 
-* **Autenticação de Usuário:** Sistema de login e cadastro com validação rigorosa de e-mail institucional (`@ufrpe.br`) e segurança de credenciais.
-* **Feed de Problemas (In-Memory):** Exibição dinâmica de problemas reportados, permitindo que qualquer usuário logado visualize as demandas da comunidade.
-* **Reporte de Problemas:** Interface para descrição detalhada de incidentes, categorização por área técnica e fornecimento de contato.
-* **Gerenciamento de Perfil:** Visualização dos dados cadastrais do usuário logado.
-* **Interface CLI Profissional:** Navegação baseada em menus, uso de artes ASCII e tratamento de fluxo de tela para uma melhor experiência do usuário (UX).
+* **Autenticação de Usuário:** Sistema de login e cadastro com validação de e-mail institucional (`@ufrpe.br`).
+* **Feed de Problemas (In-Memory):** Exibição de problemas reportados armazenados temporariamente na sessão.
+* **Reporte de Problemas:** Interface para descrição de incidentes, categorização e contato.
+* **Gerenciamento de Perfil:** Visualização dos dados cadastrais do usuário.
+* **Interface CLI:** Navegação intuitiva via terminal com artes ASCII e menus organizados.
 
 ## 🛠️ Tecnologias e Bibliotecas Utilizadas
 
-Para esta versão, o projeto utiliza exclusivamente recursos nativos do Python, priorizando a lógica algorítmica e a manipulação de dados em memória:
+O projeto utiliza apenas recursos nativos do Python, focando na lógica algorítmica:
 
-* **Linguagem:** Python 3.x
-* **Biblioteca `time`**: Utilizada para gerenciar o fluxo de tempo, delays de resposta e transições de tela.
-* **Bibliotecas `os` & `sys`**: Essenciais para a limpeza do terminal (`cls`/`clear`) e manipulação do buffer de entrada (`stdin`).
-* **Lógica de Strings (Built-in)**: Validações customizadas de formato sem bibliotecas externas, utilizando métodos como `.isalpha()`, `.isdigit()`, `.isspace()` e `.endswith()`.
+* **Linguagem:** Python 3.x.
+* **Biblioteca `time`**: Gerenciamento de fluxo e transições de tela.
+* **Bibliotecas `os` & `sys`**: Limpeza de terminal e manipulação de buffer.
+* **Lógica de Strings**: Validações customizadas com métodos como `.isalpha()` e `.endswith()`.
 
-## 💾 Estrutura de Dados e Persistência (Lógica da Ementa)
+## 💾 Estrutura de Dados e Persistência
 
-Seguindo os requisitos acadêmicos, a Release 1.0 utiliza **Persistência Volátil**, o que significa que os dados são armazenados enquanto o programa está em execução:
+Esta release utiliza **Persistência Volátil**, aplicando conceitos fundamentais da ementa:
 
-1.  **Dicionários (`dict`)**: Cada usuário e cada problema é um objeto mapeado com chaves e valores.
-2.  **Listas (`list`)**: Funcionam como o banco de dados principal, armazenando as coleções de usuários e o feed de problemas.
-3.  **Modularização**: O código é dividido em arquivos `.py` distintos para separar a lógica de interface, validação e armazenamento.
+1.  **Dicionários (`dict`)**: Representação de usuários e problemas.
+2.  **Listas (`list`)**: Armazenamento das coleções de dados durante a execução.
+3.  **Modularização**: Divisão em arquivos `.py` para separação de responsabilidades.
 
-## ⚙️ Instalação e Detalhes de Execução
-
-### Pré-requisitos
-* Possuir o Python 3.10 ou superior instalado.
+## ⚙️ Instalação e Execução
 
 ### Passo a Passo
 1.  **Clonar o repositório:**
     ```bash
-    git clone [https://github.com/seu-usuario/SIRP.git](https://github.com/seu-usuario/SIRP.git)
-    cd SIRP
+    git clone [https://github.com/Fala-serio-JD/PISI1_SIRP.git](https://github.com/Fala-serio-JD/PISI1_SIRP.git)
+    cd PISI1_SIRP
     ```
 2.  **Executar o sistema:**
     ```bash
     python index.py
     ```
 
-> **Aviso:** Esta versão não utiliza SQL. Ao encerrar o processo no terminal, os novos dados cadastrados durante a sessão serão resetados para o estado inicial definido em `banco_dados_problemas.py`.
+> **Aviso:** Esta versão não utiliza SQL. Ao encerrar o programa, os dados novos serão redefinidos para o estado inicial de `banco_dados_problemas.py`.
 
 ## 🎓 Critérios Acadêmicos Atendidos
 
-Este projeto demonstra a aplicação prática de:
-* **Estruturas de Controle**: Loops (`while`, `for`) e Condicionais (`if/elif/else`).
-* **Coleções Avançadas**: Manipulação profunda de listas e dicionários.
-* **Modularização**: Criação de um sistema multi-arquivos com importações organizadas.
-* **Funções com Retorno**: Uso de tuplas para validação de erros e booleanos para controle de acesso.
+* **Estruturas de Controle**: Uso de loops (`while`, `for`) e condicionais.
+* **Coleções**: Manipulação de listas e dicionários.
+* **Modularização**: Organização em multi-arquivos.
+* **Funções com Retorno**: Uso de tuplas para validação de erros.
 
 ---
-**Projeto desenvolvido para a disciplina de PISI1 - BSI / UFRPE.**
+**Projeto acadêmico para PISI1 - BSI - UFRPE.**
