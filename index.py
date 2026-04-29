@@ -1,25 +1,26 @@
 import time
-
 from login import tela_login
 from cadastro import tela_cadastro
-from utils import limpar_tela, logo, cadastrar_usuario, logoff
+from utils import limpar_tela, logo, cadastrar_usuario, logoff, divisoria
 from menu import tela_menu
 from perfil import tela_perfil
-from controle_problemas import reportar_novo_problema, listar_problemas
-import banco_dados_problemas
+from bancoSQL import reportar_novo_problema,listar_problemasBD
+
 
 usuarios = []
 
 limpar_tela()
 print(f"""{logo()}
 Bem vindo(a)!
-O SIRP dedica-se como uma rede social integrando os mais diversos saberes na resolução de problemas  de caráter interdiciplinar.
+O SIRP dedica-se como uma rede social integrando os mais diversos saberes na resolução de problemas  de caráter 
+interdiciplinar.
 
 Reporte qualquer problema e encontre alguém que queira dar uma solução…
-Assim promovendo a cooperação na comunidade de modo facilitado, entre aqueles que querem gerar projetos e aqueles que precisam de uma solução!
+Assim promovendo a cooperação na comunidade de modo facilitado, entre aqueles que querem gerar projetos e aqueles
+que precisam de uma solução!
 
 Desse jeito, nunca foi tão fácil fazer networking!
--------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
 """)
 
 time.sleep(7.5)
@@ -49,35 +50,35 @@ while True:
         time.sleep(2)
         print("Não entendi. Digite 'sim' ou 'não'.")
 
-tela_menu(usuarios, nome)
+tela_menu()
 
 while True:
-    opcao = tela_menu(usuarios, nome)
+    opcao = tela_menu()
     if opcao == '1':
         print("Você escolheu 'listar problemas'. Aguarde...")
         time.sleep(2)
         limpar_tela()
-        if nome and email: listar_problemas()
+        if nome and email: listar_problemasBD()
         else: tela_perfil(usuarios)  
 
     elif opcao == '2':
         print("Você escolheu 'Reportar problema'. Aguarde...")
         time.sleep(2)
         limpar_tela()
-        if nome and email: reportar_novo_problema(usuarios, nome, email)
+        if nome and email: reportar_novo_problema(nome, email)
         else: tela_perfil(usuarios)
 
     elif opcao == '3': 
         print("Você escolheu 'Perfil'. Aguarde...")
         time.sleep(2)
         limpar_tela()
-        tela_perfil(usuarios, nome, email, num_contato)
+        tela_perfil()
 
     elif opcao == '4': 
         print("Você escolheu 'Sair'. Aguarde...")
         time.sleep(2)
         limpar_tela()
-        logoff() #logoff não finaliza o código. o sistema para de rodar pois não tem mais código pra rodar.
+        logoff()
         break
 
     else:print("Selecione uma opção válida!")
