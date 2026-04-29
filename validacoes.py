@@ -2,28 +2,25 @@ def validacao_acesso(usuarios, usuario_input, senha_input):
     """Função dedicada à validação do acesso ao usuário através do banco de dados de usuários.
     
     Returns:
-        bool: True or False
+        dict ou False: Retorna o dicionário do usuário se os dados coincidirem, caso contrário False.
     """
-    for u in usuarios:
+    for u in usuarios.values():
 
         usuario_valido = usuario_input == u["email"].lower()
 
         if not usuario_valido:
             usuario_valido = usuario_input == u["nome"].lower() 
-
+            
         if usuario_valido and senha_input == u["senha"]:
             print("Credenciais aceitas! Pode prosseguir.")
-            return True
+            return u
 
-    print("Usuário ou senha incorretos.")
     return False
 
+
+
 def nome_valido(nome):
-    """Função dedicada à verificação do parâmetros exigidos para a validação do nome.
-    
-    Returns:
-        tupla: False, [ERRO]
-    """
+    """Função dedicada à verificação do parâmetros exigidos para a validação do nome."""
     tem_letra = any(c.isalpha() for c in nome)
     tem_numero = any(c.isdigit() for c in nome)
     tem_especial = any(not (c.isalnum() or c.isspace()) for c in nome)
@@ -43,11 +40,7 @@ def nome_valido(nome):
     return True, None
 
 def email_valido(email, usuarios):
-    """Função dedicada à verificação do parâmetros exigidos para a validação do email.
-    
-    Returns:
-        tupla: False, [ERRO]
-    """
+    """Função dedicada à verificação do parâmetros exigidos para a validação do email."""
     tem_numero = any(c.isdigit() for c in email)
     tem_espaco = any(c.isspace() for c in email)
     tem_dominio = email.count("@") == 1
@@ -66,19 +59,15 @@ def email_valido(email, usuarios):
         return False, "O email é muito curto."
     if tem_numero:
         return False, "O email não deve conter números."
-    
-    for u in usuarios:
+
+    for u in usuarios.values():
         if u["email"] == email:
             return False, "O email já existe."
 
     return True, None
 
 def contato_valido(num_contato):
-    """Função dedicada à verificação do parâmetros exigidos para a validação do número de contato.
-    
-    Returns:
-        tupla: False, [ERRO]
-    """
+    """Função dedicada à verificação do parâmetros exigidos para a validação do número de contato."""
     tem_letra = any(c.isalpha() for c in num_contato)
     tem_numero = any(c.isdigit() for c in num_contato)
     tem_espaco = any(c.isspace() for c in num_contato)
@@ -101,17 +90,13 @@ def contato_valido(num_contato):
     return True, None
 
 def senha_valida(senha):
-    """Função dedicada à verificação do parâmetros exigidos para a validação da senha.
-    
-    Returns:
-        tupla: False, [ERRO]
-    """
+    """Função dedicada à verificação do parâmetros exigidos para a validação da senha."""
     tem_letra = any(c.isalpha() for c in senha)
     tem_numero = any(c.isdigit() for c in senha)
     tem_especial = any(not (c.isalnum() or c.isspace()) for c in senha)
     tamanho = len(senha) >= 8
     tem_maiuscula = any(c.isupper() for c in senha)
-    tem_minuscula = any(not (c.isupper()) for c in senha)
+    tem_minuscula = any(c.islower() for c in senha)
 
     if not tem_letra:
         return False, "A senha deve conter pelo menos uma letra."

@@ -7,66 +7,56 @@ from menu import tela_menu
 from perfil import tela_perfil
 from controle_problemas import reportar_novo_problema, listar_problemas
 
-usuarios = []
-usuario_conectado = False
+usuarios = {}
+usuario_logado = None
 
 main_cabecalho()
-
-time.sleep(7.5)
+time.sleep(1.5)
 print("Já está cadastrado?")
 
 while True:
     limpar_stdin()
-    tem_cadastro = input("(S/N)").strip().lower()
+    tem_cadastro = input("(S/N): ").strip().lower()
 
     if tem_cadastro in ["sim", "si", "s"]:
         cabecalho()
-        print("Muito bem! Vamos prosseguir para o login...")
-        time.sleep(2)
+        usuario_logado = tela_login(usuarios) 
         break
 
     elif tem_cadastro in ["não", "nao", "na", "n"]:
         cabecalho()
-        print("Tudo bem. Vamos prosseguir para o cadastramento...")
-        time.sleep(2)
         nome, email, num_contato, senha = tela_cadastro(usuarios)
         cadastrar_usuario(nome, email, senha, num_contato, usuarios)
+        
         cabecalho()
-        print("Cadastro concluído com êxito! Por favor, faça login no sistema agora.")
+        print("Cadastro concluído! Faça login agora.")
         time.sleep(2)
-        usuario_conectado = tela_login(usuarios)
-        time.sleep(2)
+        usuario_logado = tela_login(usuarios) # Login após cadastro
         break
-
     else:
-        limpar_tela()
-        time.sleep(2)
-        print("Não entendi. Digite 'sim' ou 'não'.")
+        print("Digite 'sim' ou 'não'.")
 
-while True:
+while usuario_logado:
+    u_nome = usuario_logado['nome']
+    u_email = usuario_logado['email']
+    u_contato = usuario_logado['num_contato']
+
     opcao = tela_menu()
+    
     if opcao == '1':
-        print("Você escolheu 'listar problemas'. Aguarde...")
-        time.sleep(2)
         limpar_tela()
-        if nome and email: listar_problemas()
-        else: tela_perfil(usuarios, nome, email, num_contato)  
+        listar_problemas() # Se a lista for global
 
     elif opcao == '2':
-        print("Você escolheu 'Reportar problema'. Aguarde...")
-        time.sleep(2)
         limpar_tela()
-        if nome and email: reportar_novo_problema(usuarios, nome, email)
-        else: tela_perfil(usuarios, nome, email, num_contato)
+        reportar_novo_problema(usuarios, u_nome, u_email)
 
     elif opcao == '3': 
-        print("Você escolheu 'Perfil'. Aguarde...")
-        time.sleep(2)
         limpar_tela()
-        tela_perfil(usuarios, nome, email, num_contato)
+        tela_perfil(usuarios, u_nome, u_email, u_contato)
 
     elif opcao == '4': 
-        usuario_conectado = logoff()    #ver se tá funcionando
+        logoff()
         break
-
-    else:print("Selecione uma opção válida!")
+    else:
+        print("Selecione uma opção válida!")

@@ -74,24 +74,16 @@ def tela_cadastro(usuarios):
 
 id_usuario = 1
 def cadastrar_usuario(nome, email, senha, num_contato, usuarios):
-    """Esta função arbitra um id ao usuário e aloca em um dicionário o nome, email, senha e número de contato fornecidos.
-    
-    args:
-        nome (str)
-        email (str)
-        senha (str)
-        num_contato (int)
-        usuarios (dicionário)
-    """
     global id_usuario
 
     usuario = {
-        "id": id_usuario,
         "nome": nome,
         "email": email,
         "senha": senha,
         "num_contato": num_contato
-        }
+    }
 
-    usuarios.append(usuario)
+    # Adiciona ao dicionário principal usando o ID como chave
+    usuarios[id_usuario] = usuario
+    
     id_usuario += 1

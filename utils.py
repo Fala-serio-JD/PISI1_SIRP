@@ -104,15 +104,15 @@ def submeter_titulo():
     """
     while True:
         limpar_stdin()
-        titulo = input("Título (até 100 caracteres): ")
+        titulo = input("Título (até 70 caracteres): ")
 
-        if len(titulo) > 0 and len(titulo)<= 100:
+        if len(titulo) > 0 and len(titulo)<= 70:
             print("Título válido!")
             break
         elif len(titulo) == 0:
             print("O título é obrigatório.")
         else:
-            print("O seu título excedeu o limite de 100 caracteres.")
+            print("O seu título excedeu o limite de 70 caracteres.")
     return titulo
 
 def submeter_descricao():
@@ -123,13 +123,12 @@ def submeter_descricao():
     """
     while True:
         limpar_stdin()
-        descricao = input("Descreva o problema (até 1000 caracteres): ")
+        descricao = input("Descreva o problema para que outros usuários possam entender o contexto, e se interessar em coloborar: ")
 
-        if len(descricao) > 0 and len(descricao) <= 1000:
-            print("Descrição válida.")
-            break
-        elif len(descricao) == 0:
+        if len(descricao) == 0:
             print("A descrição é obrigatória.")
         else:
-            print("A sua descrição excedeu o limite máximo de 1000 caracteres.")
+            print("Descrição válida.")
+            break
+
     return descricao

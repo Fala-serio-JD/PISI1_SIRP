@@ -4,6 +4,7 @@ banco = sqlite3.connect('SIRP_BD.db')
 cursor = banco.cursor()
 
 
+<<<<<<< Updated upstream
 #cursor.execute("""
 #CREATE TABLE problemas (
     #id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,6 +16,9 @@ cursor = banco.cursor()
     #status TEXT
 #)
 #""")
+=======
+
+>>>>>>> Stashed changes
 def adicionar_problemaBD(titulo, descricao, autor, contato, areas):
     tentativas = 3
     sucesso = False
@@ -61,8 +65,101 @@ def mostrar_problema(id_problema):
         try:
             problema = cursor.execute(f"SELECT {id_problema} FROM problemas")
             banco.commit()
+<<<<<<< Updated upstream
             return problema
             sucesso= True
+=======
+            
+            if cursor.rowcount > 0:
+                print(f"✅ Status do problema #{id_problema} mudou para {novo_status.upper()}!")
+                return True
+            return False
+
+        except sqlite3.OperationalError as e:
+            if "locked" in str(e):
+                sleep(2)
+                tentativas -= 1
+            else: break
+    return False
+
+
+def atualizar_campo_problemaBD(id_problema, atributo, novo_valor):
+    """
+    Altera um campo específico de um problema (ex: título, status, areas).
+    Args:
+        id_problema (int): ID do relato.
+        atributo (str): Nome da coluna no banco.
+        novo_valor (qualquer): O novo dado.
+    Returns: bool: True se atualizado, False se atributo inválido ou ID não achado.
+    """
+    tentativas = 3
+    sucesso = False
+    
+    colunas_permitidas = ['título', 'descricao', 'autor', 'contato', 'areas', 'status']
+    if atributo not in colunas_permitidas:
+        print(f"🛑 Erro: O atributo '{atributo}' não existe na tabela de problemas.")
+        return False
+
+    while tentativas > 0 and not sucesso:
+        try:
+            sql = f"UPDATE problemas SET {atributo} = ? WHERE id = ?"
+            cursor.execute(sql, (novo_valor, id_problema))
+            banco.commit()
+            
+            if cursor.rowcount > 0:
+                print(f"✅ O campo '{atributo}' do problema #{id_problema} foi atualizado!")
+                sleep(2)
+                sucesso = True
+                return True
+            else:
+                print(f"⚠️ Problema #{id_problema} não localizado.")
+                sleep(2)
+                return False
+
+        except sqlite3.OperationalError as e:
+            if "locked" in str(e):
+                tentativas -= 1
+                sleep(3)
+            else:
+                break
+        except sqlite3.Error as erro:
+            print(f"❌ Erro crítico ao alterar problema: {erro}")
+            sleep(3)
+            break
+            
+    return False
+
+
+#--USUÁRIOS-----------------------------------------------------------------------------------------
+
+def adicionar_usuarioBD(nome, email, telefone, senha):
+    """
+    Cadastra um novo usuário no sistema. Por padrão, ele nasce deslogado (0).
+    Args:
+        nome (str), email (str - Chave Primária), telefone (str), senha (str).
+    Returns:
+        bool: True se o cadastro foi um sucesso, False em caso de falha (ex: email já existe).
+    """
+    tentativas = 3
+    sucesso = False
+    # Definimos que o usuário começa deslogado (0)
+    status_logado = 0 
+
+    while tentativas > 0 and not sucesso:    
+        try:
+            sql = '''INSERT INTO usuarios (nome, email, telefone, senha, logado) 
+                     VALUES (?, ?, ?, ?, ?)'''
+            
+            valores = (nome, email, telefone, senha, status_logado)
+            
+            cursor.execute(sql, valores)
+            banco.commit()
+            
+            print(f"👤 Usuário {nome} cadastrado com sucesso!")
+            sleep(3)
+            sucesso = True
+            return True # Retorna True para seu código saber que o cadastro foi feito
+>>>>>>> Stashed changes
         
         except sqlite3.OperationalError as e:
             if "locked" in str(e):
