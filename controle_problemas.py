@@ -12,7 +12,7 @@ def listar_problemas():
     escolher_problema()
 
 
-def escolher_problema():    #OBS: SAIR DE ESCOLHER PROBLEMA NÃO TÁ FUNCIONANDO!
+def escolher_problema():
     """Interface CLI para a escolha e exibição do(s) problema(s) selecionado(s) pelo usuário."""
     while True:
         limpar_stdin()
