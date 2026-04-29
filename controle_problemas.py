@@ -4,44 +4,46 @@ from utils import limpar_tela, divisoria, divisoria_grossa, cabecalho, limpar_st
 import banco_dados_problemas
 
 def listar_problemas():
-    """Interface CLI para exposição em feed dos problemas cadastrados no sistema."""
-    cabecalho()
-    print("=== FEED DE PROBLEMAS RURALINDA ===")
-    for problema in banco_dados_problemas.feed_de_problemas:
-        print(f"{problema['id_problema']} - {problema['titulo']} [{problema['area']}]")
-    escolher_problema()
+    """Interface CLI principal do feed."""
+    while True:
+        cabecalho()
+        print("=== FEED DE PROBLEMAS RURALINDA ===")
+        for problema in banco_dados_problemas.feed_de_problemas:
+            print(f"{problema['id_problema']} - {problema['titulo']} [{problema['area']}]")
 
+        if not escolher_problema():
+            break
 
 def escolher_problema():
-    """Interface CLI para a escolha e exibição do(s) problema(s) selecionado(s) pelo usuário."""
-    while True:
-        limpar_stdin()
-        id_problema = input("Digite o número para ler detalhes ou '0' para voltar: ")
-        if id_problema != '0':
+    """Retorna True para continuar no feed ou False para sair."""
+    limpar_stdin()
+    id_input = input("Digite o número para ler detalhes ou '0' para voltar: ")
 
-            try:
-                limpar_tela()
-                problema = banco_dados_problemas.feed_de_problemas[(int(id_problema)) - 1]    
-                print(f""" --- DETALHES DO PROBLEMA #{problema["id_problema"]} ---
+    if id_input == '0':
+        print("Retornando para o Menu...")
+        time.sleep(2)
+        return False
+
+    try:
+        indice = int(id_input) - 1
+        problema = banco_dados_problemas.feed_de_problemas[indice]
+        
+        limpar_tela()
+        print(f""" --- DETALHES DO PROBLEMA #{problema["id_problema"]} ---
 \nTÍTULO: {problema["titulo"]}
 \nDESCRIÇÃO: {problema["descrição"]}
 \nAUTOR: {problema["autor"]}
 \nCONTATO: {problema["contato"]} 
 \n{divisoria()}""")
-                time.sleep(12)
-                listar_problemas()
-                
-            except ValueError:
-                print("Digite um número válido!")
+        
+        input("\nPressione ENTER para voltar ao feed.")
+        return True
 
-            except IndexError:
-                print("Esse problema não existe!")
+    except (ValueError, IndexError):
+        print("Selecione um problema existente! Tente novamente.")
+        time.sleep(2)
+        return True
 
-        else: 
-            cabecalho()
-            print("Retornando para o Menu...")
-            time.sleep(2)
-            break
 
 def reportar_novo_problema(usuarios, nome, email):
     """Interface CLI dedicada ao registro de novos problemas
