@@ -61,5 +61,12 @@ Esta release utiliza **Persistência Volátil**, aplicando conceitos fundamentai
 * **Modularização**: Organização em multi-arquivos.
 * **Funções com Retorno**: Uso de tuplas para validação de erros.
 
+## 📊 Documentação e Fluxo
+O mapeamento da lógica de navegação e as decisões do sistema podem ser conferidos no fluxograma oficial do projeto:
+
+* [📥 Baixar Fluxograma_SIRP_1VA.drawio](Fluxograma_SIRP_1VA.drawio)
+
+> **Nota:** Para visualizar ou editar o fluxo, basta carregar o arquivo acima no [diagrams.net](https://app.diagrams.net/).
+
 ---
 **Projeto acadêmico para PISI1 - BSI - UFRPE.**
