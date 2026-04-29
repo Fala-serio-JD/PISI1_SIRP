@@ -14,7 +14,7 @@ def logo():
 ╚══════╝╚═╝╚═╝  ╚═╝╚═╝     
         
 System Integration Ruralinda Problems      
--------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
 """
 
 def parametros_cadastro():
@@ -45,7 +45,7 @@ def parametros_cadastro():
 id_usuario = 1
 
 def cadastrar_usuario(nome, email, senha, num_contato, usuarios):
-    global id_usuario   #Usar global é má prática. Isso vai dar problema no futuro.
+    global id_usuario
 
     usuario = {
         "id": id_usuario,
@@ -58,24 +58,21 @@ def cadastrar_usuario(nome, email, senha, num_contato, usuarios):
     usuarios.append(usuario)
     id_usuario += 1
 
-def divisoria():  #Dá pra mesclar com a linha divisoria grossa desde que se use um parâmetro na função e aplique 
+def divisoria():  
     return "-" * 90
 
 def divisoria_grossa():
-    return "=" * 20
+    return "=" * 35
 
 def status(usuarios, nome):
-    condicao = f"[Logado como: {nome}]" if nome else "[Deslogado]" # Precisa mesmo do "Deslogado"?
+    condicao = f"[Logado como: {nome}]" if nome else "[Deslogado]" 
     return condicao
 
 def logoff():
     limpar_tela()
-    #username = ""
-    #email = ""
     print("Saindo do sistema...")
     time.sleep(2)
 
-def cabecalho(usuarios, nome):
+def cabecalho():
     limpar_tela()
     logo()
-    status(usuarios, nome)

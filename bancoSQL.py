@@ -1,8 +1,15 @@
 import sqlite3
+import os
+from menu import tela_menu
 from time import sleep
-banco = sqlite3.connect('SIRP_BD.db')
+from utils import limpar_tela, divisoria, divisoria_grossa, cabecalho
+caminho_atual = os.path.dirname(os.path.abspath(__file__))
+caminho_db = os.path.join(caminho_atual, "SIRP_BD.db")
+banco = sqlite3.connect(caminho_db)
 cursor = banco.cursor()
 banco.row_factory = sqlite3.Row
+
+
 
 #--- PROBLEMAS ------------------------------------------------------------------------------------------
 
@@ -28,11 +35,12 @@ def adicionar_problemaBD(titulo, descricao, autor, contato, areas):
             valores = titulo, descricao, autor, contato, f"[{areas}]", status
             
             cursor.execute(sql, valores)
-            id= cursor.lastrowid
+            id = cursor.lastrowid
             banco.commit()
             print(f"Problema {id} salvo com sucesso!")
             sleep(3)
             sucesso= True
+            banco.commit() # <--- O SEGREDO ESTÁ AQUI
             return id
         
         except sqlite3.OperationalError as e:
@@ -94,6 +102,59 @@ def mostrar_problemaBD(id_problema):
     if not sucesso: 
         print("🛑 Não foi possível recuperar os dados.")
 
+        
+def listar_problemasBD():
+    """
+    Exibe o feed de problemas formatado em caixinhas, 
+    puxando os dados diretamente do banco SQLite.
+    """
+
+    tentativas = 3
+    sucesso = False
+    cabecalho()
+    while tentativas > 0 and not sucesso:    
+        try:
+            cursor.execute("SELECT id, título, areas FROM problemas")
+            problemas = cursor.fetchall()
+            
+            limpar_tela()
+            print(f"{divisoria_grossa()} FEED DE PROBLEMAS RURALINDA {divisoria_grossa()}")
+            
+            if problemas:
+                for p in problemas:
+                    # p[0] = id, p[1] = título, p[2] = areas
+                    print(f"\n  {p[0]:02d} 📌 {p[1]}")
+                    print(f"          Setor: {p[2]}") 
+                    print(f"  {divisoria()}")
+                
+                sucesso = True
+                escolher_problema()
+            else:
+                print("\n📭 O feed está vazio no momento.")
+                print(divisoria())
+                sucesso = True
+
+        except sqlite3.OperationalError as e:
+            if "locked" in str(e):
+                print(f"❌ Erro de operação: {e}")
+                print("⚠️ Banco ocupado. Tentando novamente...")
+                tentativas -= 1
+                sleep(3)
+            else:
+                print(f"❌ Erro de acesso: {e}")
+                sleep(3)
+                break
+        except sqlite3.Error as erro:
+            print(f"❌ Erro no banco de dados: {erro}")
+            sleep(3)
+            break
+
+    if not sucesso: 
+        print("🛑 Falha ao carregar o feed. Verifique a conexão com o banco.")
+        sleep(3)
+
+
+
 
 def deletar_problemaBD(id_problema):
     """
@@ -115,6 +176,7 @@ def deletar_problemaBD(id_problema):
                 banco.commit()
                 sucesso = True
                 print(f"✅ Problema #{id_problema} excluído com sucesso!")
+                banco.commit()
                 sleep(3)
             else:
                 print(f"⚠️ O ID #{id_problema} não existe no banco de dados.")
@@ -138,6 +200,102 @@ def deletar_problemaBD(id_problema):
     if not sucesso and tentativas == 0:
         print("🛑 Falha técnica: não conseguimos acessar o banco para deletar.")
         sleep(3)
+
+
+def buscar_problemas_userlogBD(autor_nome):
+    """Retorna todos os problemas escritos por um usuário específico."""
+    try:
+        # Filtramos pelo nome do autor que está logado na sessão
+        cursor.execute("SELECT id, título, areas FROM problemas WHERE autor = ?", (autor_nome,))
+        return cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Erro ao buscar seus relatos: {e}")
+        return []
+
+def atualizar_coluna_problemaBD(id_p, coluna, novo_valor):
+    """Atualiza uma informação específica de um problema no banco."""
+    try:
+        # Usamos f-string na coluna apenas porque nomes de colunas não aceitam '?' 
+        # mas como o valor vem de um menu fixo, é seguro.
+        sql = f"UPDATE problemas SET {coluna} = ? WHERE id = ?"
+        cursor.execute(sql, (novo_valor, id_p))
+        banco.commit()
+        return True
+    except sqlite3.Error as e:
+        print(f"Erro ao atualizar: {e}")
+        return False
+
+
+def escolher_problema():
+    while True:
+        id_problema = input("\nDigite o número para ler detalhes (ou '0' para voltar): ")
+        if id_problema != '0':
+            try:
+                # 1. Busca o problema no banco usando o ID digitado
+                p = mostrar_problemaBD(int(id_problema))
+                
+                if p:
+                    limpar_tela()
+                    # 2. Exibe os detalhes usando os índices da tupla 'p'
+                    print(f"""
+                            \n{divisoria_grossa()}
+                            \n--- DETALHES DO PROBLEMA #{p[0]:02d} ---
+                            \n{divisoria_grossa()}
+
+                            \nTÍTULO:    {p[1]}
+                            \nSETOR:     {p[5]}
+                            \nSTATUS:    {p[6]}
+
+                            \nDESCRIÇÃO: {p[2]}
+
+                            \nAUTOR:     {p[3]}
+                            \nCONTATO:   {p[4]} 
+
+                            \n{divisoria()}""")
+                    
+                    input("\nPressione ENTER para voltar ao feed...")
+                    limpar_tela()
+                    listar_problemasBD() # Recarrega o feed para o usuário ver as opções de novo
+                
+            except ValueError:
+                print("❌ Erro: Digite apenas números para selecionar o problema.")
+                sleep(2)
+
+        elif id_problema == '0': 
+            limpar_tela()
+            print("Retornando para o Menu...")
+            sleep(2)
+            tela_menu()
+            break
+
+        else:
+            print("Insira um valor válido. Tente novamente.")
+
+
+def reportar_novo_problema(nome, email):
+    limpar_tela()
+
+    print(f"\n{divisoria_grossa()} REPORTADOR DE PROBLEMA {divisoria_grossa()}\n")
+
+    titulo = input("Título curto (até 70 caracteres): ")
+
+    while len(titulo) == 0 or len(titulo) > 70:
+        if len(titulo) == 0:
+            print("Você deve escrever um título.")
+        else:
+            print(f"Máximo de 70 caracteres. Excedeu {len(titulo) - 70}.")
+        titulo = input("Título curto: ")
+
+    descricao = input("Descreva o problema: ")
+
+    while len(descricao) == 0:
+        print("Descrição inválida.")
+        descricao = input("Descreva o problema: ")
+
+    print(f"\n[ TECNOLOGIA, AGRÁRIA, SAÚDE, SOCIAIS, EXATAS ]")
+    areas = input("Quais dessas áreas ou outra seu problema está inserido? ").upper()
+    adicionar_problemaBD(titulo, descricao, nome, email, areas)
+    
 
 
 def mudar_status_problemaBD(id_problema, novo_status):
@@ -224,7 +382,6 @@ def atualizar_campo_problemaBD(id_problema, atributo, novo_valor):
     return False
 
 #--USUÁRIOS-----------------------------------------------------------------------------------------
-
 
 
 
@@ -420,8 +577,8 @@ def verificar_sessao_ativaBD(email_sessao):
             resultado = cursor.fetchone()
             
             if resultado and resultado[0] == 1:
-                return True  # Tem alguém usando!
-            return False     # Tá livre!
+                return True  
+            return False     
 
         except sqlite3.OperationalError as e:
             if "locked" in str(e):
@@ -468,6 +625,7 @@ def fazer_logoffBD(email_sessao):
         try:
             cursor.execute("UPDATE usuarios SET logado = 0 WHERE email = ?", (email_sessao,))
             banco.commit()
+            banco.close()
             return True
         except sqlite3.OperationalError as e:
             if "locked" in str(e):
