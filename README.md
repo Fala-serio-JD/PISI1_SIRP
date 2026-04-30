@@ -68,5 +68,7 @@ O mapeamento da lógica de navegação e as decisões do sistema podem ser confe
 
 > **Nota:** Para visualizar ou editar o fluxo, basta carregar o arquivo acima no [diagrams.net](https://app.diagrams.net/).
 
+* [📥 Baixar Tabela de Acompanhamento_de_Projetos-JezreeleDaniel.pdf](Acompanhamento_de_Projetos-JezreeleDaniel.pdf)
+
 ---
 **Projeto acadêmico para PISI1 - BSI - UFRPE.**
