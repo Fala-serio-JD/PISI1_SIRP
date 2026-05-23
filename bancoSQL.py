@@ -225,9 +225,6 @@ def atualizar_campo_problemaBD(id_problema, atributo, novo_valor):
 
 #--USUÁRIOS-----------------------------------------------------------------------------------------
 
-
-
-
 def adicionar_usuarioBD(nome, email, telefone, senha):
     """
     Cadastra um novo usuário no sistema. Por padrão, ele nasce deslogado (0).
@@ -236,9 +233,9 @@ def adicionar_usuarioBD(nome, email, telefone, senha):
     Returns:
         bool: True se o cadastro foi um sucesso, False em caso de falha (ex: email já existe).
     """
+
     tentativas = 3
     sucesso = False
-    # Definimos que o usuário começa deslogado (0)
     status_logado = 0 
 
     while tentativas > 0 and not sucesso:    
@@ -321,6 +318,7 @@ def mostrar_usuario_logadoBD(email_sessao):
 
 
 def deletar_conta_usuarioBD(email_sessao):
+
     """
     Exclui a conta do usuário logado. Ação irreversível.
     Args:
@@ -328,6 +326,7 @@ def deletar_conta_usuarioBD(email_sessao):
     Returns:
         bool: True se a conta foi excluída, False caso contrário.
     """
+
     tentativas = 3
     sucesso = False
     
@@ -434,27 +433,82 @@ def verificar_sessao_ativaBD(email_sessao):
     return False
 
 
-def fazer_loginBD(email_sessao):
+def fazer_loginBD(usuario_input, senha_input):
     """
-    Registra a entrada do usuário no sistema, bloqueando a conta para outros (logado = 1).
-    Args: email_sessao (str): E-mail do usuário.
-    Returns: bool: True se o login foi registrado no banco, False se deu erro.
+    Valida o acesso (Nome/Email + Senha) e marca como logado = 1.
+    Inclui tratamento para banco ocupado (locked).
     """
-    tentativas = 3
-    while tentativas > 0:    
+    tentativas_banco = 3
+    
+    while tentativas_banco > 0:
         try:
-            cursor.execute("UPDATE usuarios SET logado = 1 WHERE email = ?", (email_sessao,))
-            banco.commit()
-            if cursor.rowcount > 0:
-                return True
+            # Conecta ao banco de dados
+            conn = sqlite3.connect('SIRP_BD.db')
+            cursor = conn.cursor()
+            
+            # 1. VALIDAÇÃO: Busca usuário por Nome ou Email que tenha a Senha correta
+            # Usamos LOWER no SQL para ignorar maiúsculas/minúsculas
+            sql_busca = """
+                SELECT email FROM usuarios 
+                WHERE (LOWER(email) = LOWER(?) OR LOWER(nome) = LOWER(?)) 
+                AND senha = ?
+            """
+            cursor.execute(sql_busca, (usuario_input, usuario_input, senha_input))
+            resultado = cursor.fetchone()
+
+            if resultado:
+                email_encontrado = resultado[0] # Pega o email da tupla retornada
+                
+                # 2. LOGIN: Atualiza o status para logado
+                cursor.execute("UPDATE usuarios SET logado = 1 WHERE email = ?", (email_encontrado,))
+                conn.commit()
+                
+                if cursor.rowcount > 0:
+                    print("✅ Credenciais aceitas! Usuário logado com sucesso.")
+                    conn.close()
+                    return email_encontrado
+            
+            # Se chegou aqui, as credenciais estão erradas
+            conn.close()
             return False
 
         except sqlite3.OperationalError as e:
             if "locked" in str(e):
+                print(f"⚠️ Banco ocupado. Tentando novamente... ({tentativas_banco})")
+                tentativas_banco -= 1
                 sleep(2)
-                tentativas -= 1
-            else: break
+            else:
+                print(f"❌ Erro operacional: {e}")
+                break
+        except sqlite3.Error as e:
+            print(f"❌ Erro de banco de dados: {e}")
+            break
+            
     return False
+
+def buscar_dados_usuario(usuario_input):
+    """Busca os dados no banco para preencher o dicionário do sistema."""
+    conn = sqlite3.connect('SIRP_BD.db')
+    cursor = conn.cursor()
+    
+    sql = """
+    SELECT nome, email, telefone, senha 
+    FROM usuarios 
+    WHERE LOWER(email) = LOWER(?) OR LOWER(nome) = LOWER(?)
+    """
+    
+    cursor.execute(sql, (usuario_input, usuario_input))
+    res = cursor.fetchone()
+    conn.close()
+
+    if res:
+        return {
+            "nome": res[0],
+            "email": res[1],
+            "num_contato": res[2],
+            "senha": res[3]
+        }
+    return None
 
 
 def fazer_logoffBD(email_sessao):
@@ -475,4 +529,5 @@ def fazer_logoffBD(email_sessao):
                 tentativas -= 1
             else: break
     return False
+
 
